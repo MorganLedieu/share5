@@ -8,6 +8,7 @@ use App\Form\ContactType;
 use Symfony\Component\HttpFoundation\Request;
 
 
+
 class StaticController extends AbstractController
 {
     /**
@@ -23,21 +24,18 @@ class StaticController extends AbstractController
     /**     
      * @Route("/contact", name="contact")     
      */    
-    public function contact()
+    public function contact(Request $request)
     {               
+        $form = $this->createForm(ContactType::class);
+        if ($request->isMethod('POST')) {
+                $form->handleRequest($request);
+                    if ($form->isSubmitted() && $form->isValid()) {
+                        $this->addFlash('notice','Formulaire envoyé !');
+                                }
+                                      }
         return $this->render('static/contact.html.twig', [       
-            'controller_name' => 'StaticController', 
+            'form'=>$form->createView()
             ]);    
         
-    }
-
-    /**
-     * @Route("/propos", name="propos")
-     */
-    public function propos()
-    {
-        return $this->render('static/index.html.twig', [
-            'controller_name' => 'StaticController',
-        ]);
     }
 }
